@@ -6,7 +6,7 @@ import markdown
 import webbrowser
 import os
 
-REPORT_MD = r"C:\Users\Tan Wei Feng\.gemini\antigravity\brain\c150bf9b-5287-47cc-8019-05bfdb895c4a\project_report.md"
+REPORT_MD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Planning.md")
 OUTPUT_HTML = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Project_Report.html")
 
 # Read the markdown source
