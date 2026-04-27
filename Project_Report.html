@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CineMatch - Project Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #4a4a6a;
+    --accent: #e94560;
+    --accent-light: #fff0f3;
+    --border: #e8e8f0;
+    --code-bg: #f6f8fa;
+    --table-header: #1a1a2e;
+    --table-stripe: #f9f9fc;
+  }
+
+  @media print {
+    body { font-size: 10pt; }
+    .no-print { display: none !important; }
+    h1, h2, h3 { page-break-after: avoid; }
+    table, pre, blockquote { page-break-inside: avoid; }
+    @page { margin: 1.5cm 2cm; }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.75;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  /* --- Headings --- */
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 48px 0 8px;
+    letter-spacing: -0.5px;
+  }
+  h1:first-child { margin-top: 0; }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 40px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 28px 0 12px;
+  }
+
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin: 20px 0 8px;
+  }
+
+  p {
+    margin: 12px 0;
+    color: var(--text);
+  }
+
+  strong { color: var(--text); }
+
+  /* --- Horizontal Rules --- */
+  hr {
+    border: none;
+    border-top: 2px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* --- Tables --- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 0.9rem;
+  }
+
+  thead th {
+    background: var(--table-header);
+    color: #fff;
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 14px;
+  }
+
+  thead th:first-child { border-radius: 6px 0 0 0; }
+  thead th:last-child { border-radius: 0 6px 0 0; }
+
+  tbody td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  tbody tr:nth-child(even) { background: var(--table-stripe); }
+  tbody tr:hover { background: var(--accent-light); }
+
+  /* --- Code --- */
+  code {
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.85em;
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+  }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    margin: 16px 0;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    color: var(--text);
+  }
+
+  /* --- Blockquotes (alerts) --- */
+  blockquote {
+    border-left: 4px solid var(--accent);
+    background: var(--accent-light);
+    padding: 14px 20px;
+    margin: 16px 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  blockquote p { margin: 4px 0; color: var(--text); }
+
+  /* --- Lists --- */
+  ul, ol {
+    margin: 10px 0 10px 24px;
+  }
+
+  li {
+    margin: 4px 0;
+  }
+
+  /* --- Print button --- */
+  .print-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--table-header);
+    color: #fff;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 999;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+
+  .print-bar span { font-weight: 600; font-size: 0.9rem; }
+
+  .print-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 8px 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .print-btn:hover { opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<div class="print-bar no-print">
+  <span>CineMatch Project Report</span>
+  <button class="print-btn" onclick="window.print()">Save as PDF (Ctrl+P)</button>
+</div>
+
+<div style="height: 48px;" class="no-print"></div>
+
+<h1 id="cinematch-movie-genre-recommendation-system">CineMatch: Movie Genre Recommendation System</h1>
+<h2 id="complete-project-report">Complete Project Report</h2>
+<hr />
+<h2 id="1-introduction">1. Introduction</h2>
+<h3 id="11-project-overview">1.1 Project Overview</h3>
+<p><strong>CineMatch</strong> is a data science project that builds a <strong>genre-based movie recommendation system</strong> using the IMDb Top 1000 Movies Dataset sourced from Kaggle. The system allows a user to select a movie genre (e.g., "Action", "Sci-Fi", "Drama") and instantly receive a ranked list of the highest-quality movies in that genre.</p>
+<p>The project follows a structured data science pipeline — from raw data ingestion, through cleaning and exploratory analysis, to a fully functional recommendation engine served via a Flask web application.</p>
+<h3 id="12-problem-statement">1.2 Problem Statement</h3>
+<p>Users often struggle to find high-quality movies within a specific genre. Simple sorting by rating can be misleading, as niche films with very few votes may appear alongside universally acclaimed blockbusters. This project solves that problem by implementing <strong>IMDB's Weighted Rating formula</strong>, which balances a movie's average rating against the volume of votes it has received, ensuring that only truly popular <em>and</em> highly-rated films are recommended.</p>
+<h3 id="13-dataset">1.3 Dataset</h3>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Source</strong></td>
+<td>Kaggle — IMDb Top 1000 Movies Dataset</td>
+</tr>
+<tr>
+<td><strong>Format</strong></td>
+<td>CSV (<code>Kaggle_IMDB_Dataset.csv</code>)</td>
+</tr>
+<tr>
+<td><strong>Records</strong></td>
+<td>1,000 movies</td>
+</tr>
+<tr>
+<td><strong>Features</strong></td>
+<td>16 columns</td>
+</tr>
+<tr>
+<td><strong>Size</strong></td>
+<td>~438 KB</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Original Columns:</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Column</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>Poster_Link</code></td>
+<td>string</td>
+<td>URL to the movie poster image</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>Series_Title</code></td>
+<td>string</td>
+<td>Name of the movie</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>Released_Year</code></td>
+<td>string</td>
+<td>Year the movie was released</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>Certificate</code></td>
+<td>string</td>
+<td>Age certification (e.g., PG-13, R, U)</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>Runtime</code></td>
+<td>string</td>
+<td>Duration in minutes (e.g., "142 min")</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>Genre</code></td>
+<td>string</td>
+<td>Comma-separated genres (e.g., "Action, Crime, Drama")</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>IMDB_Rating</code></td>
+<td>float</td>
+<td>IMDB user rating (7.6 – 9.3)</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>Overview</code></td>
+<td>string</td>
+<td>Brief plot synopsis</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>Meta_score</code></td>
+<td>float</td>
+<td>Metacritic score (28 – 100)</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>Director</code></td>
+<td>string</td>
+<td>Movie director</td>
+</tr>
+<tr>
+<td>11</td>
+<td><code>Star1</code></td>
+<td>string</td>
+<td>Lead actor 1</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>Star2</code></td>
+<td>string</td>
+<td>Lead actor 2</td>
+</tr>
+<tr>
+<td>13</td>
+<td><code>Star3</code></td>
+<td>string</td>
+<td>Supporting actor 1</td>
+</tr>
+<tr>
+<td>14</td>
+<td><code>Star4</code></td>
+<td>string</td>
+<td>Supporting actor 2</td>
+</tr>
+<tr>
+<td>15</td>
+<td><code>No_of_Votes</code></td>
+<td>int</td>
+<td>Total number of IMDB user votes</td>
+</tr>
+<tr>
+<td>16</td>
+<td><code>Gross</code></td>
+<td>string</td>
+<td>Box office gross revenue in USD</td>
+</tr>
+</tbody>
+</table>
+<h3 id="14-technology-stack">1.4 Technology Stack</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Technology</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Language</td>
+<td>Python 3</td>
+</tr>
+<tr>
+<td>Data Processing</td>
+<td>Pandas, NumPy</td>
+</tr>
+<tr>
+<td>Visualization</td>
+<td>Matplotlib, Seaborn</td>
+</tr>
+<tr>
+<td>Machine Learning Concepts</td>
+<td>Scikit-learn (available, used for concepts)</td>
+</tr>
+<tr>
+<td>Web Framework</td>
+<td>Flask</td>
+</tr>
+<tr>
+<td>Frontend</td>
+<td>HTML5, CSS3, Vanilla JavaScript</td>
+</tr>
+<tr>
+<td>Environment</td>
+<td>Python venv (virtual environment)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-implementation-pipeline">2. Implementation Pipeline</h2>
+<p>The project is implemented across <strong>6 sequential phases</strong>, each producing a concrete output that feeds into the next.</p>
+<div class="highlight"><pre><span></span><code>flowchart LR
+    A[&quot;Phase 1\nProblem\nDefinition&quot;] --&gt; B[&quot;Phase 2\nData\nUnderstanding&quot;]
+    B --&gt; C[&quot;Phase 3\nData\nCleaning&quot;]
+    C --&gt; D[&quot;Phase 4\nExploratory\nAnalysis&quot;]
+    D --&gt; E[&quot;Phase 5\nRecommendation\nEngine&quot;]
+    E --&gt; F[&quot;Phase 6\nFlask\nWeb UI&quot;]
+</code></pre></div>
+
+<hr />
+<h3 id="21-phase-1-problem-definition-goals">2.1 Phase 1: Problem Definition &amp; Goals</h3>
+<p><strong>Objective:</strong> Define what we want to achieve and how we will measure success.</p>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Choice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Target</strong></td>
+<td>Build a genre-based movie recommendation system</td>
+</tr>
+<tr>
+<td><strong>Approach</strong></td>
+<td>Popularity-based filtering (no user history required)</td>
+</tr>
+<tr>
+<td><strong>Key Metrics</strong></td>
+<td>IMDB Rating + Number of Votes (combined via Weighted Rating)</td>
+</tr>
+<tr>
+<td><strong>Primary Features</strong></td>
+<td><code>Genre</code>, <code>IMDB_Rating</code>, <code>No_of_Votes</code></td>
+</tr>
+<tr>
+<td><strong>Supporting Features</strong></td>
+<td><code>Overview</code>, <code>Certificate</code>, <code>Runtime</code>, <code>Director</code>, <code>Star1–4</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why Popularity-Based?</strong><br />
+This approach solves the <strong>Cold Start Problem</strong> — it does not require any prior user viewing history. It is ideal for a "Top 1000" curated dataset where every movie is already highly rated, and the differentiator becomes <em>how many people</em> agreed it was good.</p>
+<hr />
+<h3 id="22-phase-2-data-acquisition-understanding">2.2 Phase 2: Data Acquisition &amp; Understanding</h3>
+<p><strong>Script:</strong> <code>01_data_understanding.py</code></p>
+<p>This phase loads the raw CSV and performs initial inspection to understand the data's structure, types, and quality.</p>
+<p><strong>Implementation:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;Kaggle_IMDB_Dataset.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># Inspection steps</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>          <span class="c1"># First 5 rows</span>
+<span class="n">df</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>          <span class="c1"># Last 5 rows</span>
+<span class="n">df</span><span class="o">.</span><span class="n">shape</span>           <span class="c1"># (1000, 16)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>          <span class="c1"># Column types and non-null counts</span>
+<span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>      <span class="c1"># Summary statistics (numerical)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;object&#39;</span><span class="p">])</span>  <span class="c1"># Summary statistics (categorical)</span>
+</code></pre></div>
+
+<p><strong>Key Findings:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Total Records</th>
+<th>Non-Null</th>
+<th>Missing</th>
+<th>Missing %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Certificate</td>
+<td>1000</td>
+<td>899</td>
+<td><strong>101</strong></td>
+<td>10.1%</td>
+</tr>
+<tr>
+<td>Meta_score</td>
+<td>1000</td>
+<td>843</td>
+<td><strong>157</strong></td>
+<td>15.7%</td>
+</tr>
+<tr>
+<td>Gross</td>
+<td>1000</td>
+<td>831</td>
+<td><strong>169</strong></td>
+<td>16.9%</td>
+</tr>
+</tbody>
+</table>
+<p>All other columns had zero missing values.</p>
+<p><strong>Numerical Summary:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Statistic</th>
+<th>IMDB_Rating</th>
+<th>Meta_score</th>
+<th>No_of_Votes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mean</td>
+<td>7.95</td>
+<td>77.97</td>
+<td>273,693</td>
+</tr>
+<tr>
+<td>Std Dev</td>
+<td>0.28</td>
+<td>12.38</td>
+<td>327,373</td>
+</tr>
+<tr>
+<td>Min</td>
+<td>7.60</td>
+<td>28.00</td>
+<td>25,088</td>
+</tr>
+<tr>
+<td>Max</td>
+<td>9.30</td>
+<td>100.00</td>
+<td>2,343,110</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="23-phase-3-data-cleaning-preprocessing">2.3 Phase 3: Data Cleaning &amp; Preprocessing</h3>
+<p><strong>Script:</strong> <code>02_data_cleaning.py</code><br />
+<strong>Output:</strong> <code>Kaggle_IMDB_Dataset_Cleaned.csv</code></p>
+<p>This phase transforms the raw dataset into a clean, analysis-ready format.</p>
+<h4 id="231-handling-missing-values">2.3.1 Handling Missing Values</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Strategy</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Certificate</code></td>
+<td>Fill with <code>'Unrated'</code></td>
+<td>Categorical — a meaningful default label</td>
+</tr>
+<tr>
+<td><code>Meta_score</code></td>
+<td>Fill with <strong>median</strong></td>
+<td>Numerical — median is robust against outliers</td>
+</tr>
+<tr>
+<td><code>Gross</code></td>
+<td>Fill with <strong>median</strong></td>
+<td>Numerical — median avoids skew from blockbusters</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Certificate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Certificate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;Unrated&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Gross&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Gross&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Gross&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Meta_score&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Meta_score&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Meta_score&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span>
+</code></pre></div>
+
+<h4 id="232-data-type-conversion">2.3.2 Data Type Conversion</h4>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Before</th>
+<th>After</th>
+<th>Transformation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Gross</code></td>
+<td><code>str</code> (<code>"28,341,469"</code>)</td>
+<td><code>float</code> (<code>28341469.0</code>)</td>
+<td>Remove commas → cast to float</td>
+</tr>
+<tr>
+<td><code>Runtime</code></td>
+<td><code>str</code> (<code>"142 min"</code>)</td>
+<td><code>int</code> (<code>142</code>)</td>
+<td>Remove " min" suffix → cast to int</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Gross&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Gross&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Runtime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Runtime&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; min&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</code></pre></div>
+
+<h4 id="233-duplicate-check">2.3.3 Duplicate Check</h4>
+<div class="highlight"><pre><span></span><code><span class="n">df</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>  <span class="c1"># Result: 0 duplicates found</span>
+</code></pre></div>
+
+<h4 id="234-string-formatting">2.3.4 String Formatting</h4>
+<div class="highlight"><pre><span></span><code><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Series_Title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Series_Title&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Director&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Director&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</code></pre></div>
+
+<h4 id="235-feature-engineering-genre-one-hot-encoding">2.3.5 Feature Engineering: Genre One-Hot Encoding</h4>
+<p>Since each movie can belong to multiple genres (e.g., <code>"Action, Crime, Drama"</code>), the <code>Genre</code> column is split and <strong>one-hot encoded</strong> into 21 binary columns.</p>
+<div class="highlight"><pre><span></span><code><span class="n">genres_dummies</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Genre&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39;, &#39;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">genres_dummies</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+
+<p><strong>Result:</strong> 21 new boolean columns added:</p>
+<div class="highlight"><pre><span></span><code>Action, Adventure, Animation, Biography, Comedy, Crime, Drama, Family,
+Fantasy, Film-Noir, History, Horror, Music, Musical, Mystery, Romance,
+Sci-Fi, Sport, Thriller, War, Western
+</code></pre></div>
+
+<p>Each column contains <code>1</code> if the movie belongs to that genre, <code>0</code> otherwise. This is critical for the recommendation engine's filtering logic.</p>
+<hr />
+<h3 id="24-phase-4-exploratory-data-analysis-eda">2.4 Phase 4: Exploratory Data Analysis (EDA)</h3>
+<p><strong>Script:</strong> <code>03_eda.py</code><br />
+<strong>Output:</strong> 6 plot images saved to <code>eda_plots/</code></p>
+<h4 id="241-univariate-analysis">2.4.1 Univariate Analysis</h4>
+<table>
+<thead>
+<tr>
+<th>Plot</th>
+<th>File</th>
+<th>Key Observation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IMDB Rating Distribution</td>
+<td><code>01_imdb_rating_dist.png</code></td>
+<td>Ratings cluster tightly between 7.6–8.3, with a right tail reaching 9.3</td>
+</tr>
+<tr>
+<td>Release Year Distribution</td>
+<td><code>02_released_year_dist.png</code></td>
+<td>The majority of top-rated movies were released post-1990</td>
+</tr>
+<tr>
+<td>Genre Frequency</td>
+<td><code>03_genre_counts.png</code></td>
+<td>Drama is the most common genre, followed by Adventure and Comedy</td>
+</tr>
+</tbody>
+</table>
+<h4 id="242-bivariatemultivariate-analysis">2.4.2 Bivariate/Multivariate Analysis</h4>
+<table>
+<thead>
+<tr>
+<th>Plot</th>
+<th>File</th>
+<th>Key Observation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Correlation Matrix</td>
+<td><code>04_correlation_matrix.png</code></td>
+<td><code>No_of_Votes</code> has the strongest positive correlation with <code>Gross</code> revenue</td>
+</tr>
+<tr>
+<td>Rating vs. Gross</td>
+<td><code>05_rating_vs_gross.png</code></td>
+<td>Higher ratings do not strongly predict higher revenue — blockbusters span the full rating range</td>
+</tr>
+<tr>
+<td>Rating by Certificate</td>
+<td><code>06_rating_by_certificate.png</code></td>
+<td>The 'U' (Universal) certificate shows wide rating variance; 'R'-rated films are more consistently highly rated</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-recommendation-algorithm-core-logic">3. Recommendation Algorithm (Core Logic)</h2>
+<blockquote>
+<p>[!IMPORTANT]<br />
+This section explains the crucial part — how CineMatch decides which movies to suggest and in what order.</p>
+</blockquote>
+<h3 id="31-the-problem-with-simple-sorting">3.1 The Problem with Simple Sorting</h3>
+<p>A naive approach would sort movies by <code>IMDB_Rating</code> descending. However, this has a critical flaw:</p>
+<ul>
+<li>A movie with a <strong>9.0 rating from 25,000 votes</strong> would rank higher than a movie with an <strong>8.9 rating from 2,343,110 votes</strong>.</li>
+<li>The first movie's rating is based on a small audience and may not be representative. The second movie has been validated by over 2 million people.</li>
+</ul>
+<h3 id="32-imdbs-weighted-rating-formula">3.2 IMDB's Weighted Rating Formula</h3>
+<p>To solve this, the system uses <strong>IMDB's own Weighted Rating (WR) formula</strong>, which is a form of <strong>Bayesian averaging</strong>:</p>
+<div class="highlight"><pre><span></span><code>WR = (v / (v + m)) × R + (m / (v + m)) × C
+</code></pre></div>
+
+<p>Where:</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+<th>Value in Our Dataset</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v</code></td>
+<td>Number of votes for the movie (<code>No_of_Votes</code>)</td>
+<td>Varies per movie</td>
+</tr>
+<tr>
+<td><code>m</code></td>
+<td>Minimum votes required to be considered</td>
+<td><strong>374,161</strong> (75th percentile)</td>
+</tr>
+<tr>
+<td><code>R</code></td>
+<td>The movie's own average rating (<code>IMDB_Rating</code>)</td>
+<td>Varies per movie</td>
+</tr>
+<tr>
+<td><code>C</code></td>
+<td>The mean rating across ALL movies in the dataset</td>
+<td><strong>7.95</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="33-how-the-formula-works">3.3 How the Formula Works</h3>
+<p>The formula is essentially a <strong>confidence-weighted blend</strong> between a movie's individual rating and the global average:</p>
+<ul>
+<li><strong>When <code>v</code> is very large</strong> (millions of votes): The term <code>v / (v + m)</code> approaches <code>1</code>, so <code>WR ≈ R</code>. The movie's own rating dominates. The system trusts its rating because many people voted.</li>
+<li><strong>When <code>v</code> is very small</strong> (close to the minimum): The term <code>m / (v + m)</code> is large, so <code>WR</code> is pulled toward <code>C</code> (the global mean of 7.95). The system doesn't fully trust this rating because few people voted, so it regresses toward the average.</li>
+</ul>
+<p><strong>Example Calculation:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Movie</th>
+<th>Rating (R)</th>
+<th>Votes (v)</th>
+<th>WR Calculation</th>
+<th>Final WR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The Dark Knight</td>
+<td>9.0</td>
+<td>2,303,232</td>
+<td><code>(2303232/2677393)×9.0 + (374161/2677393)×7.95</code></td>
+<td><strong>8.85</strong></td>
+</tr>
+<tr>
+<td>12 Angry Men</td>
+<td>9.0</td>
+<td>689,845</td>
+<td><code>(689845/1064006)×9.0 + (374161/1064006)×7.95</code></td>
+<td><strong>8.63</strong></td>
+</tr>
+<tr>
+<td>A niche film</td>
+<td>9.0</td>
+<td>30,000</td>
+<td><code>(30000/404161)×9.0 + (374161/404161)×7.95</code></td>
+<td><strong>8.03</strong></td>
+</tr>
+</tbody>
+</table>
+<p>All three films have the same raw IMDB Rating of 9.0, but the Weighted Rating correctly ranks The Dark Knight (2.3M votes) higher than 12 Angry Men (690K votes), and <em>much</em> higher than a niche film with only 30K votes.</p>
+<h3 id="34-implementation">3.4 Implementation</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Step 1: Calculate global constants</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;IMDB_Rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>           <span class="c1"># C = 7.95</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;No_of_Votes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span>   <span class="c1"># m = 374,161</span>
+
+<span class="c1"># Step 2: Apply the WR formula to every movie</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">weighted_rating</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;No_of_Votes&#39;</span><span class="p">]</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;IMDB_Rating&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">v</span> <span class="o">/</span> <span class="p">(</span><span class="n">v</span> <span class="o">+</span> <span class="n">m</span><span class="p">))</span> <span class="o">*</span> <span class="n">R</span> <span class="o">+</span> <span class="p">(</span><span class="n">m</span> <span class="o">/</span> <span class="p">(</span><span class="n">v</span> <span class="o">+</span> <span class="n">m</span><span class="p">))</span> <span class="o">*</span> <span class="n">C</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Weighted_Rating&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">weighted_rating</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="35-genre-filtering">3.5 Genre Filtering</h3>
+<p>Once every movie has a Weighted Rating, the recommendation process is straightforward:</p>
+<div class="highlight"><pre><span></span><code>User Input: &quot;Action&quot;
+     │
+     ▼
+┌─────────────────────────────┐
+│  Filter: df[df[&#39;Action&#39;]==1]│   ← Use the one-hot encoded column
+│  (keeps only Action movies) │
+└─────────────┬───────────────┘
+              │
+              ▼
+┌─────────────────────────────┐
+│  Sort by Weighted_Rating    │
+│  (descending)               │
+└─────────────┬───────────────┘
+              │
+              ▼
+┌─────────────────────────────┐
+│  Return top 10 results      │
+│  with metadata               │
+└─────────────────────────────┘
+</code></pre></div>
+
+<p><strong>Implementation:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">recommend_movies</span><span class="p">(</span><span class="n">genre</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="c1"># Case-insensitive genre matching</span>
+    <span class="n">matched</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">GENRES</span> <span class="k">if</span> <span class="n">g</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">genre</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">matched</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">genre_col</span> <span class="o">=</span> <span class="n">matched</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Filter using one-hot encoded column</span>
+    <span class="n">filtered</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">genre_col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="c1"># Sort by Weighted Rating and return top N</span>
+    <span class="n">filtered</span> <span class="o">=</span> <span class="n">filtered</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;Weighted_Rating&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">top_n</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">filtered</span>
+</code></pre></div>
+
+<h3 id="36-sample-output-action-genre">3.6 Sample Output — "Action" Genre</h3>
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Movie</th>
+<th>Year</th>
+<th>Rating</th>
+<th>WR</th>
+<th>Director</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>#1</td>
+<td>The Dark Knight</td>
+<td>2008</td>
+<td>9.0</td>
+<td>8.85</td>
+<td>Christopher Nolan</td>
+</tr>
+<tr>
+<td>#2</td>
+<td>LOTR: Return of the King</td>
+<td>2003</td>
+<td>8.9</td>
+<td>8.72</td>
+<td>Peter Jackson</td>
+</tr>
+<tr>
+<td>#3</td>
+<td>Inception</td>
+<td>2010</td>
+<td>8.8</td>
+<td>8.67</td>
+<td>Christopher Nolan</td>
+</tr>
+<tr>
+<td>#4</td>
+<td>LOTR: Fellowship of the Ring</td>
+<td>2001</td>
+<td>8.8</td>
+<td>8.64</td>
+<td>Peter Jackson</td>
+</tr>
+<tr>
+<td>#5</td>
+<td>The Matrix</td>
+<td>1999</td>
+<td>8.7</td>
+<td>8.56</td>
+<td>Lana Wachowski</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-flask-web-application-cinematch-ui">4. Flask Web Application (CineMatch UI)</h2>
+<h3 id="41-architecture">4.1 Architecture</h3>
+<div class="highlight"><pre><span></span><code>flowchart TB
+    subgraph Browser
+        A[index.html + style.css]
+    end
+    subgraph Flask Server
+        B[&quot;app.py&quot;]
+        C[&quot;Cleaned CSV\n(loaded at startup)&quot;]
+    end
+
+    A -- &quot;GET /&quot; --&gt; B
+    B -- &quot;Render template\n(genre list)&quot; --&gt; A
+    A -- &quot;POST /recommend\n{genre: &#39;Action&#39;}&quot; --&gt; B
+    B -- &quot;Filter + Sort\n(Weighted Rating)&quot; --&gt; C
+    C --&gt; B
+    B -- &quot;JSON response\n{movies: [...]}&quot; --&gt; A
+    A -- &quot;Render movie cards\n(JavaScript)&quot; --&gt; A
+</code></pre></div>
+
+<h3 id="42-backend-apppy">4.2 Backend — <code>app.py</code></h3>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/</code></td>
+<td>GET</td>
+<td>Serves the main HTML page with the list of 21 genres</td>
+</tr>
+<tr>
+<td><code>/recommend</code></td>
+<td>POST</td>
+<td>Accepts a <code>genre</code> form field, returns JSON array of top 10 movies</td>
+</tr>
+</tbody>
+</table>
+<p>The cleaned dataset and Weighted Ratings are computed <strong>once at server startup</strong> and stored in memory as global variables (<code>DF</code>, <code>GENRES</code>). This ensures every request is served instantly without re-reading the CSV.</p>
+<h3 id="43-frontend-indexhtml-stylecss">4.3 Frontend — <code>index.html</code> + <code>style.css</code></h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Implementation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Design</strong></td>
+<td>Premium dark-mode theme with animated gradient background particles</td>
+</tr>
+<tr>
+<td><strong>Typography</strong></td>
+<td>Google Fonts: Outfit (headings), Inter (body)</td>
+</tr>
+<tr>
+<td><strong>Genre Selector</strong></td>
+<td>21 pill-shaped buttons with genre-specific icons</td>
+</tr>
+<tr>
+<td><strong>AJAX Requests</strong></td>
+<td>JavaScript <code>fetch()</code> API — no page reloads</td>
+</tr>
+<tr>
+<td><strong>Movie Cards</strong></td>
+<td>Horizontal layout with poster image, metadata badges, overview text</td>
+</tr>
+<tr>
+<td><strong>Animations</strong></td>
+<td>Staggered card entrance (80ms delay per card), hover lift effects</td>
+</tr>
+<tr>
+<td><strong>Responsive</strong></td>
+<td>Flexbox-based layout that stacks vertically on mobile screens</td>
+</tr>
+</tbody>
+</table>
+<h3 id="44-how-to-run">4.4 How to Run</h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># From the project directory:</span>
+venv<span class="se">\S</span>cripts<span class="se">\p</span>ython.exe<span class="w"> </span>app.py
+
+<span class="c1"># Then open in browser:</span>
+<span class="c1"># http://127.0.0.1:5000</span>
+</code></pre></div>
+
+<hr />
+<h2 id="5-project-file-structure">5. Project File Structure</h2>
+<div class="highlight"><pre><span></span><code>Movie Genre DSP/
+├── app.py                          # Flask web server (CineMatch)
+├── 01_data_understanding.py        # Load &amp; inspect raw data
+├── 02_data_cleaning.py             # Clean, convert, and engineer features
+├── 03_eda.py                       # Generate visual analysis plots
+├── 04_recommendation_engine.py     # CLI recommendation system
+├── Kaggle_IMDB_Dataset.csv         # Raw dataset (1000 movies, 16 cols)
+├── Kaggle_IMDB_Dataset.zip         # Original zipped dataset
+├── Kaggle_IMDB_Dataset_Cleaned.csv # Cleaned dataset (output of Phase 3)
+├── Kaggle_IMDB_Metadata.json       # MLCommons Croissant metadata
+├── Planning.md                     # Project planning document
+├── requirements.txt                # Python dependencies
+├── templates/
+│   └── index.html                  # Web page template
+├── static/
+│   └── style.css                   # CSS styling (dark theme)
+├── eda_plots/                      # EDA output images
+│   ├── 01_imdb_rating_dist.png
+│   ├── 02_released_year_dist.png
+│   ├── 03_genre_counts.png
+│   ├── 04_correlation_matrix.png
+│   ├── 05_rating_vs_gross.png
+│   └── 06_rating_by_certificate.png
+└── venv/                           # Python virtual environment
+</code></pre></div>
+
+<hr />
+<h2 id="6-conclusion">6. Conclusion</h2>
+<p>This project demonstrates a complete, end-to-end data science workflow:</p>
+<ol>
+<li><strong>Problem Definition</strong> — Identified the need for a genre-based recommendation system that handles the Cold Start problem.</li>
+<li><strong>Data Understanding</strong> — Inspected 1,000 movies across 16 features, identifying 3 columns with significant missing data.</li>
+<li><strong>Data Cleaning</strong> — Imputed missing values with domain-appropriate strategies, converted string columns to numeric types, and one-hot encoded 21 genres.</li>
+<li><strong>Exploratory Analysis</strong> — Generated 6 visualizations revealing that Drama dominates the dataset, vote count correlates with revenue, and ratings cluster tightly between 7.6–8.3.</li>
+<li><strong>Recommendation Engine</strong> — Implemented IMDB's Bayesian-averaged Weighted Rating formula, which prevents low-vote movies from unfairly outranking universally acclaimed films.</li>
+<li><strong>Web Interface</strong> — Deployed the engine as a responsive Flask web app with a premium dark-mode UI, AJAX-powered genre filtering, and animated movie cards.</li>
+</ol>
+<p>The <strong>Weighted Rating formula</strong> is the intellectual core of the system. By blending a movie's individual rating with the global average — weighted by how many people voted — it produces rankings that reflect both quality and consensus. This is the same principle used by IMDB's own Top 250 list.</p>
+
+</body>
+</html>

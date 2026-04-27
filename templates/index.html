@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Discover top-rated movies by genre using our AI-powered recommendation engine built on the IMDb Top 1000.">
+    <title>CineMatch - Movie Genre Recommendations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Animated background particles -->
+    <div class="bg-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <header class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-content">
+            <p class="hero-tag">Powered by IMDb Top 1000</p>
+            <h1 class="hero-title">Cine<span class="accent">Match</span></h1>
+            <p class="hero-subtitle">Discover your next favourite film. Select a genre and let our weighted-rating engine surface the best movies ever made.</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Genre Selector -->
+        <section class="genre-section" id="genre-selector">
+            <h2 class="section-title">Choose a Genre</h2>
+            <div class="genre-grid" id="genreGrid">
+                {% for genre in genres %}
+                <button class="genre-chip" data-genre="{{ genre }}" id="genre-{{ genre | lower | replace(' ', '-') }}">
+                    <span class="chip-icon"></span>
+                    {{ genre }}
+                </button>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Loading indicator -->
+        <div class="loader-container" id="loader" style="display:none;">
+            <div class="loader-ring">
+                <div></div><div></div><div></div><div></div>
+            </div>
+            <p class="loader-text">Finding the best movies...</p>
+        </div>
+
+        <!-- Results Section -->
+        <section class="results-section" id="results" style="display:none;">
+            <div class="results-header">
+                <h2 class="section-title">Top <span id="resultGenre"></span> Movies</h2>
+                <button class="btn-reset" id="resetBtn">Choose Another</button>
+            </div>
+            <div class="movie-grid" id="movieGrid"></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>Movie Genre DSP &mdash; Data Science Project &mdash; Built with Flask &amp; IMDb Top 1000 Dataset</p>
+    </footer>
+
+    <script>
+        // Genre icons mapping
+        const genreIcons = {
+            'Action': '&#9876;', 'Adventure': '&#9978;', 'Animation': '&#9733;',
+            'Biography': '&#9997;', 'Comedy': '&#9786;', 'Crime': '&#128269;',
+            'Drama': '&#127917;', 'Family': '&#127968;', 'Fantasy': '&#10024;',
+            'Film-Noir': '&#127769;', 'History': '&#128220;', 'Horror': '&#128128;',
+            'Music': '&#9835;', 'Musical': '&#9835;', 'Mystery': '&#128270;',
+            'Romance': '&#10084;', 'Sci-Fi': '&#128640;', 'Sport': '&#9917;',
+            'Thriller': '&#128163;', 'War': '&#9876;', 'Western': '&#127796;'
+        };
+
+        // Set icons on load
+        document.querySelectorAll('.genre-chip').forEach(chip => {
+            const genre = chip.dataset.genre;
+            const iconEl = chip.querySelector('.chip-icon');
+            if (genreIcons[genre]) iconEl.innerHTML = genreIcons[genre];
+        });
+
+        // Active genre state
+        let activeGenre = null;
+
+        document.querySelectorAll('.genre-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const genre = chip.dataset.genre;
+                if (activeGenre === genre) return;
+                activeGenre = genre;
+
+                // Highlight active chip
+                document.querySelectorAll('.genre-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+
+                fetchRecommendations(genre);
+            });
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            activeGenre = null;
+            document.querySelectorAll('.genre-chip').forEach(c => c.classList.remove('active'));
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('genre-selector').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        async function fetchRecommendations(genre) {
+            const loader = document.getElementById('loader');
+            const results = document.getElementById('results');
+            const grid = document.getElementById('movieGrid');
+
+            results.style.display = 'none';
+            loader.style.display = 'flex';
+
+            try {
+                const formData = new FormData();
+                formData.append('genre', genre);
+
+                const res = await fetch('/recommend', { method: 'POST', body: formData });
+                const data = await res.json();
+
+                if (data.error) {
+                    grid.innerHTML = `<p class="error-msg">${data.error}</p>`;
+                } else {
+                    document.getElementById('resultGenre').textContent = data.genre;
+                    grid.innerHTML = data.movies.map((m, i) => renderCard(m, i + 1)).join('');
+                    // Stagger card animations
+                    setTimeout(() => {
+                        document.querySelectorAll('.movie-card').forEach((card, idx) => {
+                            setTimeout(() => card.classList.add('visible'), idx * 80);
+                        });
+                    }, 50);
+                }
+
+                loader.style.display = 'none';
+                results.style.display = 'block';
+                results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (err) {
+                loader.style.display = 'none';
+                grid.innerHTML = `<p class="error-msg">Something went wrong. Please try again.</p>`;
+                results.style.display = 'block';
+            }
+        }
+
+        function renderCard(movie, rank) {
+            const ratingColor = movie.rating >= 8.5 ? 'gold' : movie.rating >= 8.0 ? 'silver' : 'bronze';
+            return `
+                <article class="movie-card" id="movie-${rank}">
+                    <div class="card-rank">#${rank}</div>
+                    <div class="card-poster">
+                        <img src="${movie.poster}" alt="${movie.title} poster" loading="lazy"
+                             onerror="this.src='https://via.placeholder.com/300x450/1a1a2e/e94560?text=No+Poster'">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">${movie.title} <span class="card-year">(${movie.year})</span></h3>
+                        <div class="card-meta">
+                            <span class="badge badge-rating ${ratingColor}">${movie.rating}</span>
+                            <span class="badge badge-wr" title="Weighted Rating">WR: ${movie.weighted_rating}</span>
+                            <span class="meta-item">${movie.runtime} min</span>
+                        </div>
+                        <p class="card-genre">${movie.genre}</p>
+                        <p class="card-overview">${movie.overview}</p>
+                        <div class="card-footer">
+                            <div class="card-detail"><span class="detail-label">Director</span><span class="detail-value">${movie.director}</span></div>
+                            <div class="card-detail"><span class="detail-label">Stars</span><span class="detail-value">${movie.stars}</span></div>
+                            <div class="card-detail"><span class="detail-label">Votes</span><span class="detail-value">${movie.votes}</span></div>
+                        </div>
+                    </div>
+                </article>
+            `;
+        }
+    </script>
+</body>
+</html>
