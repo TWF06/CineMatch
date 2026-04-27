@@ -1,5 +1,7 @@
 # 🎬 CineMatch — Movie Genre Recommendation System
 
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge)](https://cinematch-iafd.onrender.com/)
+
 A data-driven movie recommendation engine built on the **IMDb Top 1000** dataset. CineMatch uses a **weighted rating algorithm** to surface the best movies by genre, presented through a premium interactive web interface.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
