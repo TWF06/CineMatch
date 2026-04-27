@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CineMatch - Project Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
+
+  :root {
+    --bg: #ffffff;
+    --text: #1a1a2e;
+    --text-secondary: #4a4a6a;
+    --accent: #e94560;
+    --accent-light: #fff0f3;
+    --border: #e8e8f0;
+    --code-bg: #f6f8fa;
+    --table-header: #1a1a2e;
+    --table-stripe: #f9f9fc;
+  }
+
+  @media print {
+    body { font-size: 10pt; }
+    .no-print { display: none !important; }
+    h1, h2, h3 { page-break-after: avoid; }
+    table, pre, blockquote { page-break-inside: avoid; }
+    @page { margin: 1.5cm 2cm; }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.75;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  /* --- Headings --- */
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 48px 0 8px;
+    letter-spacing: -0.5px;
+  }
+  h1:first-child { margin-top: 0; }
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 40px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 28px 0 12px;
+  }
+
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin: 20px 0 8px;
+  }
+
+  p {
+    margin: 12px 0;
+    color: var(--text);
+  }
+
+  strong { color: var(--text); }
+
+  /* --- Horizontal Rules --- */
+  hr {
+    border: none;
+    border-top: 2px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* --- Tables --- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 0.9rem;
+  }
+
+  thead th {
+    background: var(--table-header);
+    color: #fff;
+    font-weight: 600;
+    text-align: left;
+    padding: 10px 14px;
+  }
+
+  thead th:first-child { border-radius: 6px 0 0 0; }
+  thead th:last-child { border-radius: 0 6px 0 0; }
+
+  tbody td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  tbody tr:nth-child(even) { background: var(--table-stripe); }
+  tbody tr:hover { background: var(--accent-light); }
+
+  /* --- Code --- */
+  code {
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.85em;
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+  }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    overflow-x: auto;
+    margin: 16px 0;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    color: var(--text);
+  }
+
+  /* --- Blockquotes (alerts) --- */
+  blockquote {
+    border-left: 4px solid var(--accent);
+    background: var(--accent-light);
+    padding: 14px 20px;
+    margin: 16px 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  blockquote p { margin: 4px 0; color: var(--text); }
+
+  /* --- Lists --- */
+  ul, ol {
+    margin: 10px 0 10px 24px;
+  }
+
+  li {
+    margin: 4px 0;
+  }
+
+  /* --- Print button --- */
+  .print-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--table-header);
+    color: #fff;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 999;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+
+  .print-bar span { font-weight: 600; font-size: 0.9rem; }
+
+  .print-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 8px 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+
+  .print-btn:hover { opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<div class="print-bar no-print">
+  <span>CineMatch Project Report</span>
+  <button class="print-btn" onclick="window.print()">Save as PDF (Ctrl+P)</button>
+</div>
+
+<div style="height: 48px;" class="no-print"></div>
+
+<h1 id="data-science-project-plan-movie-genre-dsp">Data Science Project Plan: Movie Genre DSP</h1>
+<p>This document outlines the standard phases of a Data Science project, tailored for the IMDb Top 1000 Movies Dataset. The end goal is to build a movie recommendation system based on user-selected genres.</p>
+<hr />
+<h2 id="phase-1-problem-definition-goals">Phase 1: Problem Definition &amp; Goals ✅</h2>
+<p><strong>Status:</strong> Complete<br />
+<strong>Objective:</strong> Define what we want to achieve with this dataset.<br />
+*   <strong>Define the Target:</strong> We will create a recommendation system that suggests movies when a user enters a genre they like.<br />
+*   <strong>Identify Key Metrics:</strong> For recommendations without user history, success means surfacing highly rated, relevant movies. We will prioritize high <code>IMDB_Rating</code> and <code>No_of_Votes</code> to ensure quality and popularity within the selected genre.<br />
+*   <strong>Determine Scope:</strong> Primary features: <code>Genre</code> and <code>IMDB_Rating</code>. Supporting features: <code>Overview</code>, <code>Certificate</code>, <code>Runtime</code>, <code>Director</code>, and the <code>Star</code> columns.</p>
+<hr />
+<h2 id="phase-2-data-acquisition-initial-understanding">Phase 2: Data Acquisition &amp; Initial Understanding ✅</h2>
+<p><strong>Status:</strong> Complete — <code>01_data_understanding.py</code><br />
+<strong>Objective:</strong> Load the data and get a high-level overview of its structure.<br />
+*   <strong>Load Data:</strong> Read the <code>Kaggle_IMDB_Dataset.csv</code> into a Pandas DataFrame.<br />
+*   <strong>Initial Inspection:</strong> <br />
+    *   View the first and last few rows (<code>df.head()</code>, <code>df.tail()</code>).<br />
+    *   Check dataset dimensions (<code>df.shape</code>) → <strong>1000 rows, 16 columns</strong>.<br />
+    *   Review column names and data types (<code>df.info()</code>).<br />
+    *   Generate summary statistics for numerical and categorical columns (<code>df.describe()</code>).</p>
+<p><strong>Key Findings:</strong><br />
+| Column | Missing Values | Notes |<br />
+|---|---|---|<br />
+| Certificate | 101 | Filled with 'Unrated' in Phase 3 |<br />
+| Meta_score | 157 | Filled with median in Phase 3 |<br />
+| Gross | 169 | Filled with median in Phase 3 |</p>
+<hr />
+<h2 id="phase-3-data-cleaning-preprocessing">Phase 3: Data Cleaning &amp; Preprocessing ✅</h2>
+<p><strong>Status:</strong> Complete — <code>02_data_cleaning.py</code><br />
+<strong>Output:</strong> <code>Kaggle_IMDB_Dataset_Cleaned.csv</code><br />
+<strong>Objective:</strong> Prepare the raw data for analysis by handling errors, missing values, and formatting issues.<br />
+*   <strong>Handle Missing Values (NaN):</strong> <br />
+    *   <code>Certificate</code> → filled with <code>'Unrated'</code>.<br />
+    *   <code>Meta_score</code> → filled with median value.<br />
+    *   <code>Gross</code> → filled with median value.<br />
+*   <strong>Data Type Conversion:</strong><br />
+    *   <code>Gross</code>: Removed commas, converted string → float.<br />
+    *   <code>Runtime</code>: Removed <code>" min"</code> suffix, converted string → int.<br />
+*   <strong>Handle Duplicates:</strong> 0 duplicates found.<br />
+*   <strong>String Formatting:</strong> Stripped whitespace from <code>Series_Title</code> and <code>Director</code>.<br />
+*   <strong>Feature Engineering (Initial):</strong><br />
+    *   Split the <code>Genre</code> column into <strong>21 one-hot encoded boolean columns</strong> (e.g., <code>Action</code>, <code>Drama</code>, <code>Sci-Fi</code>).</p>
+<hr />
+<h2 id="phase-4-exploratory-data-analysis-eda">Phase 4: Exploratory Data Analysis (EDA) ✅</h2>
+<p><strong>Status:</strong> Complete — <code>03_eda.py</code><br />
+<strong>Output:</strong> <code>eda_plots/</code> directory (6 plot images)<br />
+<strong>Objective:</strong> Discover patterns, spot anomalies, test hypotheses, and check assumptions.<br />
+*   <strong>Univariate Analysis:</strong><br />
+    *   Distribution of <code>IMDB_Rating</code> (Histogram) → <code>eda_plots/01_imdb_rating_dist.png</code><br />
+    *   Distribution of <code>Released_Year</code> → <code>eda_plots/02_released_year_dist.png</code><br />
+    *   Frequency counts of <code>Genre</code> (Bar chart) → <code>eda_plots/03_genre_counts.png</code><br />
+*   <strong>Bivariate/Multivariate Analysis:</strong><br />
+    *   Correlation matrix (<code>IMDB_Rating</code>, <code>Gross</code>, <code>Runtime</code>, <code>No_of_Votes</code>, <code>Meta_score</code>) → <code>eda_plots/04_correlation_matrix.png</code><br />
+    *   Scatter plot: <code>IMDB_Rating</code> vs. <code>Gross</code> → <code>eda_plots/05_rating_vs_gross.png</code><br />
+    *   Boxplot: <code>IMDB_Rating</code> across <code>Certificate</code> types → <code>eda_plots/06_rating_by_certificate.png</code></p>
+<hr />
+<h2 id="phase-5-recommendation-engine">Phase 5: Recommendation Engine ✅</h2>
+<p><strong>Status:</strong> Complete — <code>04_recommendation_engine.py</code><br />
+<strong>Script:</strong> <code>04_recommendation_engine.py</code><br />
+<strong>Objective:</strong> Build the core recommendation system that suggests top movies based on a user's preferred genre.</p>
+<ul>
+<li><strong>Weighted Rating Formula (IMDB WR):</strong><ul>
+<li><code>WR = (v / (v+m)) * R + (m / (v+m)) * C</code></li>
+<li><code>v</code> = number of votes for the movie (<code>No_of_Votes</code>)</li>
+<li><code>m</code> = minimum votes required (75th percentile threshold)</li>
+<li><code>R</code> = average rating of the movie (<code>IMDB_Rating</code>)</li>
+<li><code>C</code> = mean rating across all movies</li>
+</ul>
+</li>
+<li><strong>Genre Filtering:</strong> Use the one-hot encoded genre columns to filter movies matching the user's selected genre.</li>
+<li><strong>Ranking:</strong> Sort filtered results by Weighted Rating (descending) and return top N recommendations.</li>
+<li><strong>Interactive CLI:</strong> Provide a terminal-based loop where users can type a genre and receive recommendations.</li>
+</ul>
+<hr />
+<h2 id="phase-6-flask-web-ui-cinematch">Phase 6: Flask Web UI (CineMatch) ✅</h2>
+<p><strong>Status:</strong> Complete — <code>app.py</code><br />
+<strong>URL:</strong> <code>http://127.0.0.1:5000</code><br />
+<strong>Objective:</strong> Provide a visual, browser-based interface for the recommendation engine.</p>
+<ul>
+<li><strong>Tech Stack:</strong> Flask (backend), Vanilla HTML/CSS/JS (frontend).</li>
+<li><strong>Backend (<code>app.py</code>):</strong><ul>
+<li>Loads cleaned data and calculates Weighted Ratings at startup.</li>
+<li>Serves the main page at <code>/</code>.</li>
+<li>Exposes a <code>/recommend</code> POST endpoint returning JSON results.</li>
+</ul>
+</li>
+<li><strong>Frontend (<code>templates/index.html</code> + <code>static/style.css</code>):</strong><ul>
+<li>Dark-mode premium design with animated background particles.</li>
+<li>Interactive genre chip selector with icons (21 genres).</li>
+<li>AJAX-powered movie cards with staggered entrance animations.</li>
+<li>Each card displays: poster, title, year, IMDB rating (gold/silver/bronze badge), weighted rating, genre tags, overview, director, stars, and vote count.</li>
+<li>Responsive layout for mobile and desktop.</li>
+</ul>
+</li>
+<li><strong>How to Run:</strong><br />
+<code>venv\Scripts\python.exe app.py</code><br />
+    Then open <code>http://127.0.0.1:5000</code> in a browser.</li>
+</ul>
+<hr />
+<h2 id="project-file-structure">Project File Structure</h2>
+<div class="highlight"><pre><span></span><code>Movie Genre DSP/
+├── app.py                          # Phase 6: Flask web server (CineMatch)
+├── 01_data_understanding.py        # Phase 2: Load &amp; inspect raw data
+├── 02_data_cleaning.py             # Phase 3: Clean, convert, and engineer features
+├── 03_eda.py                       # Phase 4: Generate visual analysis plots
+├── 04_recommendation_engine.py     # Phase 5: CLI recommendation system
+├── Kaggle_IMDB_Dataset.csv         # Raw dataset (1000 movies, 16 columns)
+├── Kaggle_IMDB_Dataset.zip         # Original zipped dataset
+├── Kaggle_IMDB_Dataset_Cleaned.csv # Cleaned dataset (output of Phase 3)
+├── Kaggle_IMDB_Metadata.json       # MLCommons Croissant metadata
+├── Planning.md                     # This file
+├── requirements.txt                # Python dependencies
+├── templates/
+│   └── index.html                  # Phase 6: Main web page template
+├── static/
+│   └── style.css                   # Phase 6: CSS styling (dark theme)
+├── eda_plots/                      # EDA output images
+│   ├── 01_imdb_rating_dist.png
+│   ├── 02_released_year_dist.png
+│   ├── 03_genre_counts.png
+│   ├── 04_correlation_matrix.png
+│   ├── 05_rating_vs_gross.png
+│   └── 06_rating_by_certificate.png
+└── venv/                           # Python virtual environment
+</code></pre></div>
+
+</body>
+</html>
